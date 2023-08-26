@@ -1,13 +1,20 @@
 import { useQuery } from "@tanstack/react-query";
+import Form from "./components/Form";
 
 function App() {
-  const { data } = useQuery(["todo"], async () =>
+  const { data , isFetching , status} = useQuery(["todo"], async () =>
     (await fetch("http://localhost:8000/todo")).json()
   );
   console.log("data:" ,data)
+
+  if (isFetching) {
+    return <h2>Loding...</h2>
+  }
   return (
     <div className="App">
-      <h1>hi</h1>
+      <Form />
+      <p>Status: {status}</p>
+      {data && data.data && data.data.map((todo) => <li key={todo.id}>{todo.title}</li>)}
     </div>
   );
 }
